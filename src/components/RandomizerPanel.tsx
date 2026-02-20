@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import type { FeltController } from "@feltmaps/js-sdk";
-import type { FeatureCollection } from "geojson";
 import { FeltClient } from "../felt-client";
 import { FELT_API_TOKEN, SOURCE_MAP_ID, SOURCE_LAYER_ID } from "../config";
 import { exportLayer } from "../lib/export-layer";
