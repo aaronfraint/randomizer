@@ -74,7 +74,7 @@ export class FeltClient {
     return res.json();
   }
 
-  createMap(params: { title?: string } = {}): Promise<FeltMap> {
+  createMap(params: { title?: string; basemap?: string } = {}): Promise<FeltMap> {
     return this.request("/maps", { method: "POST", body: params });
   }
 

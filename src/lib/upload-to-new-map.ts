@@ -1,31 +1,37 @@
-import type { FeatureCollection } from "geojson";
+import type { TypeBreakdown } from "./randomize";
 import { FeltClient } from "../felt-client";
 
 export interface NewMapResult {
   mapUrl: string;
   mapId: string;
-  layerId: string;
+  layerIds: string[];
 }
 
 export async function uploadToNewMap(
   client: FeltClient,
-  fc: FeatureCollection,
+  byType: TypeBreakdown[],
   title: string,
 ): Promise<NewMapResult> {
   // 1. Create a new map
-  const map = await client.createMap({ title });
+  const map = await client.createMap({ title, basemap: "satellite" });
 
-  // 2. Upload the GeoJSON as a file
-  const blob = new Blob([JSON.stringify(fc)], { type: "application/geo+json" });
-  const upload = await client.uploadFile(map.id, blob, "randomized-selection.geojson");
-  const layerId = upload.layer_id;
+  // 2. Upload each pile type as a separate layer
+  const layerIds: string[] = [];
+  for (const { type, selected, total, fc } of byType) {
+    if (fc.features.length === 0) continue;
+    const pct = Math.round((selected / total) * 100);
+    const name = `${type} (${pct}% — ${selected} of ${total})`;
+    const blob = new Blob([JSON.stringify(fc)], { type: "application/geo+json" });
+    const upload = await client.uploadFile(map.id, blob, `${name}.geojson`);
+    layerIds.push(upload.layer_id);
+  }
 
-  // 3. Poll until the layer finishes processing
-  await client.waitForLayer(map.id, layerId);
+  // 3. Poll until all layers finish processing
+  await Promise.all(layerIds.map((id) => client.waitForLayer(map.id, id)));
 
   return {
     mapUrl: map.url,
     mapId: map.id,
-    layerId,
+    layerIds,
   };
 }

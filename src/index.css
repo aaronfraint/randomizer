@@ -49,7 +49,20 @@ html, body, #root {
 
 .panel input[type="range"] {
   width: 100%;
+  margin-bottom: 4px;
+}
+
+.pile-type-sliders {
   margin-bottom: 16px;
+}
+
+.pile-type-slider {
+  padding: 8px 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.pile-type-slider:last-child {
+  border-bottom: none;
 }
 
 .panel button {
@@ -97,12 +110,48 @@ html, body, #root {
   font-size: 0.95rem;
 }
 
-.result a {
-  color: #2563eb;
-  font-weight: 500;
-  text-decoration: none;
+.type-breakdown {
+  list-style: none;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
 }
 
-.result a:hover {
-  text-decoration: underline;
+.type-breakdown li {
+  padding: 2px 0;
+  color: #333;
+}
+
+.create-map-btn {
+  margin-top: 8px;
+}
+
+.open-map-btn {
+  margin-top: 8px;
+  background: #16a34a;
+}
+
+.open-map-btn:hover:not(:disabled) {
+  background: #15803d;
+}
+
+.spinner-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
